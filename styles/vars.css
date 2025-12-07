@@ -1,0 +1,29 @@
+@font-face {
+    font-family: Mulish;
+    src: url(../fonts/Mulish-Regular.ttf);
+}
+
+@font-face {
+    font-family: Oswald;
+    src: url(../fonts/Oswald-Regular.ttf);
+}
+
+:root {
+    --brand: #4cb5b5;
+    --brand-dark: #3a9e9e;
+    --brand-light: #7ed4d4;
+    --brand-50a: rgba(76, 181, 181, 0.5);
+    --brand-20a: rgba(76, 181, 181, 0.2);
+    --accent-orange: #ff8c42;
+    --accent-yellow: #facc15;
+    --accent-green: #00c566;
+    --accent-red: #ff4747;
+    --grayscale-100: #18181b;
+    --grayscale-50: #252532;
+    --grayscale-grey1: #b0b0b2;
+    --grayscale-grey2: #d1d1d1;
+    --grayscale-grey3: #f4f4f5;
+    --grayscale-white: #ffffff;
+    --body-bg: #f8fafc;
+    --shadow-soft: rgba(24, 24, 27, 0.05);
+}

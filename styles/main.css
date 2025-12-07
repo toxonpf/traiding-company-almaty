@@ -1,0 +1,142 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+    background-color: var(--body-bg);
+    font-family: 'Mulish', 'Inter', sans-serif;
+}
+
+.navbar {
+    background-color: var(--grayscale-white);
+
+    padding: 1rem;
+
+    box-shadow: 0 1px 2px 0 var(--shadow-soft);
+}
+
+.navbarContainer {
+    margin: 0 auto;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+.logoSection {
+    height: 70px;
+    
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-shrink: 0;
+}
+
+.searchSection {
+    flex: 1;
+    
+    max-width: 42rem;
+    
+    position: relative;
+}
+
+.searchWrapper {
+    width: 100%;
+    
+    position: relative;
+}
+
+.searchIconWrapper {
+    padding-left: 1rem;
+    
+    display: flex;
+    align-items: center;
+    
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    
+    pointer-events: none;
+}
+
+.searchIconSvg {
+    width: 1.25rem;
+    height: 1.25rem;
+    display: block;
+    
+    color: var(--grayscale-grey1);
+
+}
+
+.searchInput {
+    width: 100%;
+    display: block;
+    
+    background-color: var(--grayscale-grey3);
+    border-radius: 9999px;
+    color: var(--grayscale-100);
+    outline: none;
+    
+    border: 2px solid transparent;
+    padding: 0.75rem 1rem 0.75rem 2.75rem;
+    
+    font-size: 0.875rem;
+    
+    transition: all 0.2s;
+}
+
+.searchInput::placeholder {
+    color: var(--grayscale-grey1);
+}
+
+.searchInput:focus {
+    background-color: var(--grayscale-white);
+    border-color: var(--brand-50a);
+    box-shadow: 0 0 0 2px var(--brand-20a);
+}
+
+.actionsSection {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-shrink: 0;
+}
+
+.actionBtn {
+    background: none;
+    color: var(--grayscale-100);
+    
+    border: none;
+    padding: 0.25rem;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.actionBtn:hover {
+    color: var(--brand);
+}
+
+.actionIconSvg {
+    width: 1.75rem;
+    height: 1.75rem;
+    display: block;
+}
+
+.bottomStripe {
+    width: 100%;
+    height: 0.75rem;
+
+    background-color: var(--brand);
+}
