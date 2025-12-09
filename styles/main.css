@@ -12,17 +12,29 @@ body {
     font-family: 'Mulish', 'Inter', sans-serif;
 }
 
+.button {
+    padding: 15px 30px;
+
+    background-color: var(--accent-orange);
+    border: none;
+    border-radius: 7px;
+
+    font-size: 1.3rem;
+
+    transition: all 0.2s;
+}
+
 .navbar {
     background-color: var(--grayscale-white);
 
-    padding: 1rem;
+    padding: 1rem 2rem;
 
     box-shadow: 0 1px 2px 0 var(--shadow-soft);
 }
 
 .navbarContainer {
     margin: 0 auto;
-    
+
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -31,7 +43,7 @@ body {
 
 .logoSection {
     height: 70px;
-    
+
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -39,30 +51,32 @@ body {
 }
 
 .searchSection {
+    display: flex;
     flex: 1;
-    
+    gap: 20px;
+
     max-width: 42rem;
-    
+
     position: relative;
 }
 
 .searchWrapper {
     width: 100%;
-    
+
     position: relative;
 }
 
 .searchIconWrapper {
     padding-left: 1rem;
-    
+
     display: flex;
     align-items: center;
-    
+
     position: absolute;
     top: 0;
     bottom: 0;
     left: 0;
-    
+
     pointer-events: none;
 }
 
@@ -70,7 +84,7 @@ body {
     width: 1.25rem;
     height: 1.25rem;
     display: block;
-    
+
     color: var(--grayscale-grey1);
 
 }
@@ -78,17 +92,17 @@ body {
 .searchInput {
     width: 100%;
     display: block;
-    
+
     background-color: var(--grayscale-grey3);
     border-radius: 9999px;
     color: var(--grayscale-100);
     outline: none;
-    
+
     border: 2px solid transparent;
     padding: 0.75rem 1rem 0.75rem 2.75rem;
-    
+
     font-size: 0.875rem;
-    
+
     transition: all 0.2s;
 }
 
@@ -103,40 +117,136 @@ body {
 }
 
 .actionsSection {
+    height: 60px;
+
     display: flex;
     align-items: center;
-    gap: 1.5rem;
     flex-shrink: 0;
+    gap: 0.8rem;
+
+    & .button {
+        height: 52px;
+
+        background-color: var(--brand);
+        color: var(--grayscale-white);
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.6rem;
+
+        font-weight: 700;
+
+        padding: 0 1.5rem;
+
+        &:hover {
+            filter: brightness(1.1);
+            cursor: pointer;
+        }
+
+        &:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+    }
 }
 
 .actionBtn {
-    background: none;
-    color: var(--grayscale-100);
-    
-    border: none;
-    padding: 0.25rem;
-    
+    width: 52px;
+    height: 52px;
+
+    background-color: var(--grayscale-grey3);
+    color: var(--grayscale-50);
+
+    border: 1px solid var(--grayscale-grey2);
+    border-radius: 14px;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
     cursor: pointer;
-    transition: color 0.2s;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: var(--grayscale-white);
+        color: var(--brand-dark);
+        fill: var(--brand-dark);
+        border-color: var(--grayscale-grey1);
+    }
+
+    &:hover svg {
+        color: var(--brand-dark);
+        fill: var(--brand-dark);
+        border-color: var(--grayscale-grey1);
+    }
+
+    & svg {
+        width: 1.5rem;
+        height: 1.5rem;
+        display: block;
+        
+        overflow: visible;
+
+        transition: all 0.2s ease;
+    }
 }
 
-.actionBtn:hover {
-    color: var(--brand);
+#sideMenu {
+    height: 100vh;
+    width: clamp(250px, 20vw, 300px);
+
+    padding: 30px;
+
+    background-color: var(--grayscale-white);
+    box-shadow: 0 1px 2px 0 var(--shadow-soft);
 }
 
-.actionIconSvg {
-    width: 1.75rem;
-    height: 1.75rem;
-    display: block;
-}
-
-.bottomStripe {
+.SMButton {
     width: 100%;
-    height: 0.75rem;
 
-    background-color: var(--brand);
+    padding: 15px 15px;
+    margin-bottom: 10px;
+
+    background-color: transparent;
+    color: var(--grayscale-grey1);
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    text-align: start;
+
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--grayscale-grey3);
+        color: var(--grayscale-50);
+
+        & svg {
+            color: var(--grayscale-50);
+            fill: var(--grayscale-50);
+        }
+    }
+
+    &.active {
+        background-color: var(--brand);
+        color: var(--grayscale-grey3);
+
+        cursor: auto;
+
+        & svg {
+            color: var(--grayscale-white);
+            fill: var(--grayscale-white);
+        }
+    }
+
+    & svg {
+        height: 1.2rem;
+
+        color: var(--grayscale-grey1);
+        fill: var(--grayscale-grey1);
+
+        transition: all 0.2s;
+    }
 }
