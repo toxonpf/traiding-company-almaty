@@ -12,15 +12,21 @@ body {
     font-family: 'Mulish', 'Inter', sans-serif;
 }
 
+main {
+    display: flex;
+}
+
 .button {
     padding: 15px 30px;
 
-    background-color: var(--accent-orange);
+    background-color: var(--accent-teal);
+    color: var(--grayscale-white);
     border: none;
     border-radius: 7px;
 
     font-size: 1.3rem;
 
+    user-select: none;
     transition: all 0.2s;
 }
 
@@ -146,7 +152,7 @@ body {
 
         &:active {
             transform: translateY(1px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px var(--shadow-strong);
         }
     }
 }
@@ -159,6 +165,7 @@ body {
     color: var(--grayscale-50);
 
     border: 1px solid var(--grayscale-grey2);
+
     border-radius: 14px;
 
     display: flex;
@@ -185,7 +192,7 @@ body {
         width: 1.5rem;
         height: 1.5rem;
         display: block;
-        
+
         overflow: visible;
 
         transition: all 0.2s ease;
@@ -249,4 +256,431 @@ body {
 
         transition: all 0.2s;
     }
+}
+
+.sitePart {
+    width: 100%;
+}
+
+#sectionHero {
+    padding: 20px;
+}
+
+/* --- Стили Контейнера --- */
+.sliderContainer {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+}
+
+/* Пауза анимации при наведении мыши на слайдер */
+.sliderContainer:hover .dot.active::after {
+    animation-play-state: paused;
+}
+
+.sliderWrapper {
+    display: flex;
+    width: 100%;
+}
+
+/* --- Стили Слайдов --- */
+.slide {
+    min-width: 100%;
+    height: 400px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.slide.is1 {
+    background: var(--slide-1-bg);
+}
+
+.slide.is2 {
+    background: var(--slide-2-bg);
+}
+
+.slide.is3 {
+    background: var(--slide-3-bg);
+}
+
+.slide.is4 {
+    background: var(--slide-4-bg);
+}
+
+.slideContent {
+    text-align: center;
+    z-index: 2;
+    padding: 20px;
+}
+
+/* --- Анимация Текста --- */
+.slideContent h2,
+.slideContent p {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.slideContent h2 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 10px var(--text-shadow-strong);
+}
+
+.slideContent p {
+    font-size: 1.2rem;
+    opacity: 0;
+}
+
+.slide.activeSlide .slideContent h2 {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.3s;
+}
+
+.slide.activeSlide .slideContent p {
+    opacity: 0.9;
+    transform: translateY(0);
+    transition-delay: 0.5s;
+}
+
+/* Класс для мгновенного показа текста (при телепортации с клона) */
+.slide.noAnimation .slideContent h2,
+.slide.noAnimation .slideContent p {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    transition-delay: 0s !important;
+}
+
+/* --- Кнопки Навигации (ИСПРАВЛЕНО) --- */
+.navBtn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    /* Центрирование по умолчанию */
+    background: var(--overlay-dark-30);
+    border: 1px solid var(--overlay-light-20);
+    color: var(--grayscale-white);
+    width: 44px;
+    /* Чуть увеличил размер для удобства */
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+    padding: 0;
+    /* Сброс отступов */
+}
+
+.navBtn svg {
+    width: 24px;
+    height: 24px;
+
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+
+.navBtn:hover {
+    background: var(--overlay-light-90);
+    color: var(--grayscale-100);
+    /* ВАЖНОЕ ИСПРАВЛЕНИЕ: сохраняем translateY при масштабировании */
+    transform: translateY(-50%) scale(1.1);
+}
+
+.prevBtn {
+    left: 15px;
+}
+
+.nextBtn {
+    right: 15px;
+}
+
+/* --- Индикаторы --- */
+.dotsContainer {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 10;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+
+    background-color: var(--overlay-light-40);
+    border-radius: 10px;
+
+    cursor: pointer;
+    transition: width 0.4s ease, background-color 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    -webkit-mask-image: -webkit-radial-gradient(var(--grayscale-white), var(--grayscale-100));
+}
+
+.dot.active {
+    width: 60px;
+    background-color: var(--overlay-dark-50);
+}
+
+.dot.active::after {
+    content: '';
+
+    height: 100%;
+    width: 100%;
+
+    background-color: var(--grayscale-white);
+    border-radius: 10px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    transform-origin: left;
+    transform: scaleX(0);
+    animation: progressFill 5s linear forwards;
+    will-change: transform;
+}
+
+/* Сетка каталога */
+.catalogGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+    max-width: 1200px;
+}
+
+.icon {
+    width: 1em;
+    height: 1em;
+    display: block;
+    flex-shrink: 0;
+}
+
+.iconHeart path,
+.iconBag path,
+.iconStar path,
+.iconStarHalf path {
+    fill: currentColor;
+}
+
+.iconStarEmpty path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1;
+}
+
+/* КАРТОЧКА ТОВАРА */
+.card {
+    background: var(--grayscale-white);
+    border-radius: var(--radius);
+    padding: 16px;
+    position: relative;
+    transition: var(--transition);
+    /* Добавил явную границу, так как теней больше нет */
+    border: 1px solid transparent;
+    display: flex;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    /* Тень убрана, оставляем только цвет границы */
+    box-shadow: none;
+    border-color: var(--brand-light);
+}
+
+/* Область изображения */
+.cardImageWrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1/1;
+    margin-bottom: 16px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cardImg {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 12px;
+}
+
+/* Бейджи */
+.badges {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 2;
+}
+
+.badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 6px;
+    color: white;
+    text-transform: uppercase;
+}
+
+.badge.sale {
+    background-color: var(--accent-red);
+}
+
+.badge.new {
+    background-color: var(--brand);
+}
+
+/* Кнопка "Избранное" */
+.wishlistBtn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid transparent;
+    /* Добавил границу вместо тени */
+    color: var(--grayscale-grey1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+    opacity: 0;
+    transform: translateX(10px);
+}
+
+.card:hover .wishlistBtn {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.wishlistBtn:hover {
+    color: var(--accent-red);
+    background: white;
+    border-color: var(--grayscale-grey2);
+    /* Граница при наведении */
+    box-shadow: none;
+    /* УБРАНА ТЕНЬ */
+}
+
+.wishlistBtn.active {
+    color: var(--accent-red);
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Контент */
+.cardContent {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.category {
+    font-size: 0.75rem;
+    color: var(--grayscale-grey1);
+    margin-bottom: 6px;
+}
+
+.title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--grayscale-100);
+    margin-bottom: 8px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex-grow: 1;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 12px;
+    font-size: 0.8rem;
+}
+
+.stars {
+    display: flex;
+    color: var(--accent-yellow);
+}
+
+.reviews {
+    color: var(--grayscale-grey1);
+}
+
+/* Цена и кнопка */
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    gap: 10px;
+}
+
+.priceBox {
+    display: flex;
+    flex-direction: column;
+}
+
+.price {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--grayscale-100);
+}
+
+.oldPrice {
+    font-size: 0.8rem;
+    text-decoration: line-through;
+    color: var(--grayscale-grey1);
+}
+
+.addBtn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background-color: var(--brand-10a);
+    color: var(--brand-dark);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.card:hover .addBtn {
+    background-color: var(--brand);
+    color: white;
+}
+
+.addBtn:hover {
+    transform: scale(1.1);
+    background-color: var(--brand-dark) !important;
 }

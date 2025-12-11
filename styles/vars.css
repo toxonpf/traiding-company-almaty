@@ -12,12 +12,18 @@
     --brand: #4cb5b5;
     --brand-dark: #3a9e9e;
     --brand-light: #7ed4d4;
-    --brand-50a: rgba(76, 181, 181, 0.5);
-    --brand-20a: rgba(76, 181, 181, 0.2);
-    --accent-orange: #ff8c42;
+    --brand-10a: rgba(76, 181, 181, 0.1);
+    /* calm accents */
+    --accent-teal: #4cb5b5;
     --accent-yellow: #facc15;
     --accent-green: #00c566;
     --accent-red: #ff4747;
+    --accent-lilac: #a18cd1;
+    --accent-pink: #fbc2eb;
+    --accent-coral: #ff9a9e;
+    --accent-peach: #fcb69f;
+    --accent-sand: #ffecd2;
+
     --grayscale-100: #18181b;
     --grayscale-50: #252532;
     --grayscale-grey1: #b0b0b2;
@@ -25,5 +31,24 @@
     --grayscale-grey3: #f4f4f5;
     --grayscale-white: #ffffff;
     --body-bg: #f8fafc;
+
     --shadow-soft: rgba(24, 24, 27, 0.05);
+    --shadow-strong: rgba(0, 0, 0, 0.1);
+    --text-shadow-strong: rgba(0, 0, 0, 0.2);
+    --overlay-dark-30: rgba(0, 0, 0, 0.3);
+    --overlay-dark-50: rgba(0, 0, 0, 0.5);
+    --overlay-light-20: rgba(255, 255, 255, 0.2);
+    --overlay-light-40: rgba(255, 255, 255, 0.4);
+    --overlay-light-90: rgba(255, 255, 255, 0.9);
+
+    --slide-1-bg: linear-gradient(135deg, var(--accent-coral), var(--accent-teal));
+    --slide-2-bg: linear-gradient(135deg, var(--accent-lilac), var(--accent-pink));
+    --slide-3-bg: linear-gradient(135deg, var(--accent-green), var(--accent-teal));
+    --slide-4-bg: linear-gradient(135deg, var(--accent-sand), var(--accent-peach));
+
+    --shadow-sm: none;
+    --shadow-hover: none;
+
+    --radius: 16px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

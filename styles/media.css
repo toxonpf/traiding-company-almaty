@@ -1,0 +1,9 @@
+@media (max-width: 600px) {
+    .slide {
+        height: 300px;
+    }
+
+    .slideContent h2 {
+        font-size: 2rem;
+    }
+}
