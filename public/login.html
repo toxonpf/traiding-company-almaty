@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход</title>
+    <link rel="stylesheet" href="styles/normolise.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/auth.css">
+</head>
+<body class="authPage">
+    <main class="authCard">
+        <a class="authBack" href="index.html">← Вернуться</a>
+        <h1>Вход</h1>
+        <p class="authSubtitle">Войдите в свой аккаунт для доступа к системе</p>
+        <form id="loginForm" class="authForm">
+            <label class="authLabel">
+                Email
+                <input type="email" name="email" required autocomplete="email">
+            </label>
+            <label class="authLabel">
+                Пароль
+                <input type="password" name="password" required autocomplete="current-password">
+            </label>
+            <button type="submit" class="button authSubmit">Войти</button>
+            <p id="loginMessage" class="authMessage"></p>
+        </form>
+        <div class="authResend">
+            <p>Не подтверждено письмо?</p>
+            <button class="button authResendBtn" data-resend>Отправить подтверждение</button>
+            <p id="resendMessage" class="authMessage"></p>
+        </div>
+        <div class="authFooter">
+            <span>Нет аккаунта?</span>
+            <a href="register.html">Регистрация</a>
+        </div>
+    </main>
+    <script src="js/auth.js"></script>
+</body>
+</html>

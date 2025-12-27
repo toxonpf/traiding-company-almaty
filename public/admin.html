@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ‑панель</title>
+    <link rel="stylesheet" href="styles/normolise.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/admin.css">
+</head>
+<body class="adminPage">
+    <header class="adminHeader">
+        <div>
+            <h1>Админ‑панель</h1>
+            <p id="adminUser" class="adminUser"></p>
+        </div>
+        <div class="adminActions">
+            <a class="button" href="index.html">На сайт</a>
+            <button class="button" id="logoutBtn">Выйти</button>
+        </div>
+    </header>
+    <main class="adminMain">
+        <section class="adminSection">
+            <h2>Данные</h2>
+            <div class="adminControls">
+                <label>
+                    Таблица
+                    <select id="tableSelect">
+                        <option value="categories">categories</option>
+                        <option value="products">products</option>
+                        <option value="prices">prices</option>
+                        <option value="batches">batches</option>
+                        <option value="suppliers">suppliers</option>
+                        <option value="receipts">receipts</option>
+                        <option value="receipt_items">receipt_items</option>
+                        <option value="sales">sales</option>
+                        <option value="sale_items">sale_items</option>
+                        <option value="profiles">profiles</option>
+                        <option value="stock_movements">stock_movements</option>
+                    </select>
+                </label>
+                <label>
+                    Лимит
+                    <input type="number" id="limitInput" value="100" min="1" max="500">
+                </label>
+                <button class="button" id="loadBtn">Загрузить</button>
+            </div>
+            <div id="dataStatus" class="adminStatus"></div>
+            <div id="dataList" class="adminList"></div>
+        </section>
+
+        <section class="adminSection">
+            <h2>Создание записи</h2>
+            <form id="createForm" class="adminForm">
+                <textarea id="createJson" rows="8" placeholder='{"name":"Категория"}'></textarea>
+                <button class="button" type="submit">Создать</button>
+                <p id="createStatus" class="adminStatus"></p>
+            </form>
+        </section>
+
+        <section class="adminSection">
+            <h2>Обновление записи</h2>
+            <form id="updateForm" class="adminForm">
+                <input id="updateId" type="text" placeholder="id записи" required>
+                <textarea id="updateJson" rows="8" placeholder='{"name":"Новое имя"}'></textarea>
+                <button class="button" type="submit">Обновить</button>
+                <p id="updateStatus" class="adminStatus"></p>
+            </form>
+        </section>
+
+        <section class="adminSection">
+            <h2>Удаление записи</h2>
+            <form id="deleteForm" class="adminForm">
+                <input id="deleteId" type="text" placeholder="id записи" required>
+                <button class="button danger" type="submit">Удалить</button>
+                <p id="deleteStatus" class="adminStatus"></p>
+            </form>
+        </section>
+    </main>
+    <script src="js/admin.js"></script>
+</body>
+</html>

@@ -51,4 +51,16 @@
 
     --radius: 16px;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    --auth-bg: #f0f4f8;
+    --auth-card-bg: #ffffff;
+    --auth-shadow: rgba(0, 0, 0, 0.08);
+    --auth-input-border: #e0e0e0;
+    --auth-input-focus-border: var(--brand);
+    --auth-text-primary: #212121;
+    --auth-text-secondary: #757575;
+    --auth-button-bg: var(--brand);
+    --auth-button-hover-bg: var(--brand-dark);
+    --auth-error-text: var(--accent-red);
+    --auth-success-text: var(--accent-green);
 }

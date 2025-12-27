@@ -458,10 +458,10 @@ main {
 
 /* Сетка каталога */
 .catalogGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 24px;
-    max-width: 1200px;
+    max-width: 100%;
 }
 
 .icon {
@@ -486,6 +486,7 @@ main {
 
 /* КАРТОЧКА ТОВАРА */
 .card {
+    width: 300px;
     background: var(--grayscale-white);
     border-radius: var(--radius);
     padding: 16px;

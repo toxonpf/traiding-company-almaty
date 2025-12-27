@@ -1,0 +1,209 @@
+.authPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background:
+        radial-gradient(1200px 600px at 10% 10%, #f5f0ff 0%, rgba(245, 240, 255, 0) 60%),
+        radial-gradient(900px 600px at 90% 20%, #e6f7f4 0%, rgba(230, 247, 244, 0) 55%),
+        linear-gradient(135deg, #f7f7f7 0%, #f1f5f9 100%);
+    padding: 24px;
+    font-family: 'Mulish', sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+.authPage::before,
+.authPage::after {
+    content: "";
+    position: absolute;
+    width: 320px;
+    height: 320px;
+    border-radius: 50%;
+    filter: blur(0px);
+    opacity: 0.15;
+    z-index: 0;
+}
+
+.authPage::before {
+    background: #ff8a5b;
+    top: -120px;
+    left: -80px;
+}
+
+.authPage::after {
+    background: #28b7a4;
+    bottom: -140px;
+    right: -100px;
+}
+
+.authCard {
+    width: min(450px, 100%);
+    background: var(--auth-card-bg);
+    border-radius: 24px;
+    padding: 48px 44px;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.12);
+    text-align: center;
+    animation: fadeIn 0.5s ease-out;
+    display: grid;
+    gap: 16px;
+    position: relative;
+    z-index: 1;
+    border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.authBack {
+    justify-self: flex-start;
+    font-size: 13px;
+    color: #0f766e;
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.authBack:hover {
+    color: #0b5d56;
+    text-decoration: underline;
+}
+
+.authCard h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 34px;
+    color: var(--auth-text-primary);
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+}
+
+.authSubtitle {
+    margin-bottom: 24px;
+    color: #516179;
+    font-size: 16px;
+}
+
+.authForm {
+    display: grid;
+    gap: 18px;
+    text-align: left;
+}
+
+.authLabel {
+    display: grid;
+    gap: 8px;
+    font-size: 13px;
+    color: #5f6b7a;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.authForm input {
+    padding: 14px 16px;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    border-radius: 12px;
+    font-size: 16px;
+    transition: var(--transition);
+    width: 100%;
+    background: #f8fafc;
+}
+
+.authForm input:focus {
+    outline: none;
+    border-color: #0f766e;
+    box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.2);
+    background: #ffffff;
+}
+
+.authSubmit {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    background: linear-gradient(135deg, #0f766e 0%, #0b5d56 100%);
+    color: var(--grayscale-white);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 10px 20px rgba(15, 118, 110, 0.25);
+}
+
+.authSubmit:hover {
+    background: linear-gradient(135deg, #0b5d56 0%, #0a4b46 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 16px 28px rgba(15, 118, 110, 0.3);
+}
+
+.authMessage {
+    min-height: 24px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    margin-top: 8px;
+}
+
+.authMessage.isError {
+    color: var(--auth-error-text);
+}
+
+.authMessage.isSuccess {
+    color: var(--auth-success-text);
+}
+
+.authResend {
+    margin-top: 8px;
+    display: grid;
+    gap: 8px;
+    align-items: center;
+}
+
+.authResend p {
+    font-size: 14px;
+    color: #6b7280;
+    text-align: center;
+}
+
+.authResendBtn {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+    background: #ffffff;
+    color: #0f766e;
+    border: 1px solid rgba(15, 118, 110, 0.35);
+    box-shadow: none;
+}
+
+.authResendBtn:hover {
+    background: rgba(15, 118, 110, 0.08);
+    transform: translateY(-1px);
+}
+
+.authFooter {
+    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.authFooter a {
+    color: #0f766e;
+    text-decoration: none;
+    font-weight: bold;
+    transition: var(--transition);
+}
+
+.authFooter a:hover {
+    color: #0b5d56;
+    text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+    .authCard {
+        padding: 36px 24px;
+        border-radius: 18px;
+    }
+
+    .authCard h1 {
+        font-size: 30px;
+    }
+}
