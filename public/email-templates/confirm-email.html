@@ -1,111 +1,125 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Подтверждение почты</title>
     <style>
-      body {
-        margin: 0;
-        background: #f8fafc;
-        font-family: "Mulish", Arial, sans-serif;
-        color: #18181b;
-      }
-      .wrap {
-        width: 100%;
-        padding: 32px 16px 48px;
-      }
-      .card {
-        max-width: 560px;
-        margin: 0 auto;
-        background: #ffffff;
-        border-radius: 20px;
-        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
-        overflow: hidden;
-        border: 1px solid rgba(76, 181, 181, 0.2);
-      }
-      .header {
-        padding: 28px 32px;
-        background: linear-gradient(135deg, #7ed4d4 0%, #4cb5b5 100%);
-        color: #ffffff;
-      }
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-weight: 700;
-        font-size: 18px;
-        letter-spacing: 0.5px;
-      }
-      .header h1 {
-        margin: 16px 0 0;
-        font-size: 24px;
-      }
-      .content {
-        padding: 28px 32px 32px;
-        line-height: 1.6;
-      }
-      .content p {
-        margin: 0 0 16px;
-      }
-      .btn {
-        display: inline-block;
-        background: #4cb5b5;
-        color: #ffffff !important;
-        text-decoration: none;
-        padding: 14px 24px;
-        border-radius: 12px;
-        font-weight: 700;
-        box-shadow: 0 10px 20px rgba(76, 181, 181, 0.3);
-      }
-      .footer {
-        padding: 20px 32px 28px;
-        font-size: 12px;
-        color: #6b7280;
-        background: #f4f4f5;
-      }
-      .divider {
-        height: 1px;
-        background: rgba(24, 24, 27, 0.08);
-        margin: 24px 0;
-      }
-      .muted {
-        color: #6b7280;
-      }
+        body {
+            margin: 0;
+            background: #f8fafc;
+            font-family: "Mulish", Arial, sans-serif;
+            color: #18181b;
+        }
+
+        .wrap {
+            width: 100%;
+            padding: 32px 16px 48px;
+        }
+
+        .card {
+            max-width: 560px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
+            overflow: hidden;
+            border: 1px solid rgba(76, 181, 181, 0.2);
+        }
+
+        .header {
+            padding: 28px 32px;
+            background: linear-gradient(135deg, #7ed4d4 0%, #4cb5b5 100%);
+            color: #ffffff;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: 0.5px;
+        }
+
+        .header h1 {
+            margin: 16px 0 0;
+            font-size: 24px;
+        }
+
+        .content {
+            padding: 28px 32px 32px;
+            line-height: 1.6;
+        }
+
+        .content p {
+            margin: 0 0 16px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #4cb5b5;
+            color: #ffffff !important;
+            text-decoration: none;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(76, 181, 181, 0.3);
+        }
+
+        .footer {
+            padding: 20px 32px 28px;
+            font-size: 12px;
+            color: #6b7280;
+            background: #f4f4f5;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(24, 24, 27, 0.08);
+            margin: 24px 0;
+        }
+
+        .muted {
+            color: #6b7280;
+        }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <div class="wrap">
-      <div class="card">
-        <div class="header">
-          <div class="brand">
-            <span>Traiding Company Almaty</span>
-          </div>
-          <h1>Подтвердите адрес электронной почты</h1>
+        <div class="card">
+            <div class="header">
+                <div class="brand">
+                    <span>Traiding Company Almaty</span>
+                </div>
+                <h1>Подтвердите адрес электронной почты</h1>
+            </div>
+            <div class="content">
+                <p>Здравствуйте!</p>
+                <p>
+                    Спасибо за регистрацию. Чтобы завершить создание аккаунта, подтвердите
+                    ваш email.
+                </p>
+                <p style="text-align: center; margin: 28px 0;">
+                    <a class="btn" href="{{ .ConfirmationURL }}">Подтвердить email</a>
+                </p>
+                <p class="muted">
+                    Если кнопка не работает, откройте ссылку в браузере:
+                    <br />
+                    <a href="{{ .ConfirmationURL }}">{{ .ConfirmationURL }}</a>
+                </p>
+                <div class="divider"></div>
+                <p class="muted">
+                    Если вы не регистрировались, просто проигнорируйте это письмо.
+                </p>
+            </div>
+            <div class="footer">
+                © 2025 Traiding Company Almaty, Алматы
+            </div>
         </div>
-        <div class="content">
-          <p>Здравствуйте!</p>
-          <p>
-            Спасибо за регистрацию. Чтобы завершить создание аккаунта, подтвердите
-            ваш email.
-          </p>
-          <p style="text-align: center; margin: 28px 0;">
-            <a class="btn" href="{{ .ConfirmationURL }}">Подтвердить email</a>
-          </p>
-          <p class="muted">
-            Если кнопка не работает, откройте ссылку в браузере:
-            <br />
-            <a href="{{ .ConfirmationURL }}">{{ .ConfirmationURL }}</a>
-          </p>
-          <div class="divider"></div>
-          <p class="muted">
-            Если вы не регистрировались, просто проигнорируйте это письмо.
-          </p>
-        </div>
-        <div class="footer">
-          © 2025 Traiding Company Almaty, Алматы
-        </div>
-      </div>
     </div>
-  </body>
+</body>
+
 </html>

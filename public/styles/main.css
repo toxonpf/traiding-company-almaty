@@ -685,3 +685,7 @@ main {
     transform: scale(1.1);
     background-color: var(--brand-dark) !important;
 }
+
+[hidden] {
+    display: none !important;
+}

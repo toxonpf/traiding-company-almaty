@@ -6,6 +6,15 @@ const resendButtons = document.querySelectorAll('[data-resend]');
 const resendMessage = document.getElementById('resendMessage');
 const lastEmailKey = 'auth_last_email';
 
+async function parseResponse(response) {
+    const contentType = response.headers.get('content-type') || '';
+    if (contentType.includes('application/json')) {
+        return response.json();
+    }
+    const text = await response.text();
+    return { error: text || 'Unexpected response format' };
+}
+
 function setAuthMessage(target, text, isError) {
     if (!target) {
         return;
@@ -44,7 +53,7 @@ async function resendEmail(email) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email })
         });
-        const data = await response.json();
+        const data = await parseResponse(response);
         if (!response.ok) {
             throw new Error(data.error || 'Ошибка отправки');
         }
@@ -64,7 +73,7 @@ async function handleAuth(endpoint, payload, messageTarget) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
         });
-        const data = await response.json();
+        const data = await parseResponse(response);
         if (!response.ok) {
             throw new Error(data.error || 'Ошибка запроса');
         }
