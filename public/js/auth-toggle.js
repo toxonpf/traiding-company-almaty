@@ -1,4 +1,5 @@
 const tokenKey = 'sb_access_token';
+const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
 const loginBtn = document.getElementById('loginBtn');
 const profileBtn = document.getElementById('profileBtn');
 
@@ -27,6 +28,10 @@ async function syncAuthButtons() {
             renderAuthState(false);
             return;
         }
+        const data = await response.json();
+        if (profileBtn) {
+            profileBtn.href = data.isAdmin ? 'admin.html' : 'profile.html';
+        }
         renderAuthState(true);
     } catch (err) {
         renderAuthState(false);
@@ -34,6 +39,17 @@ async function syncAuthButtons() {
 }
 
 syncAuthButtons();
+
+if (hashParams.has('access_token')) {
+    const accessToken = hashParams.get('access_token');
+    if (accessToken) {
+        localStorage.setItem(tokenKey, accessToken);
+    }
+    if (window.history && window.history.replaceState) {
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    syncAuthButtons();
+}
 
 window.addEventListener('storage', (event) => {
     if (event.key === tokenKey) {

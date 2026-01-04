@@ -5,7 +5,7 @@ const path = require('path');
 
 const supabase = createClient(
   process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_KEY
+  process.env.SUPABASE_SERVICE_ROLE_KEY
 )
 
 const app = express();
@@ -85,22 +85,36 @@ async function requireAdmin(req, res, next) {
 }
 
 app.post('/api/auth/register', async (req, res) => {
-  const { email, password } = req.body || {};
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Email and password are required' });
+  const { email, password, name, phone } = req.body || {};
+  if (!email || !password || !name || !phone) {
+    return res.status(400).json({ error: 'Email, password, name, and phone are required' });
   }
 
   try {
     const origin = req.get('origin') || 'http://localhost:3000';
     const redirectTo = process.env.SITE_URL || origin;
+    const metadata = {
+      full_name: String(name).trim(),
+      phone: String(phone).trim()
+    };
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { emailRedirectTo: redirectTo }
+      options: { emailRedirectTo: redirectTo, data: metadata }
     });
 
     if (error) {
       return res.status(400).json({ error: error.message });
+    }
+
+    if (data && data.user) {
+      const profilePayload = {
+        id: data.user.id,
+        email,
+        full_name: metadata.full_name,
+        phone: metadata.phone
+      };
+      await supabase.from('profiles').upsert(profilePayload, { onConflict: 'id' });
     }
 
     return res.json({
@@ -165,14 +179,53 @@ app.post('/api/auth/resend', async (req, res) => {
 });
 
 app.get('/api/auth/me', requireAuth, (req, res) => {
+  const metadata = (req.user && req.user.user_metadata) || {};
   return res.json({
     email: req.user.email,
-    isAdmin: isAdminEmail(req.user.email)
+    isAdmin: isAdminEmail(req.user.email),
+    lastSignInAt: req.user.last_sign_in_at || null,
+    name: metadata.full_name || metadata.name || '',
+    phone: metadata.phone || ''
   });
 });
 
+app.patch('/api/auth/me', requireAuth, async (req, res) => {
+  const { name, phone } = req.body || {};
+  if (!name && !phone) {
+    return res.status(400).json({ error: 'Name or phone is required' });
+  }
+
+  try {
+    const metadata = {
+      full_name: String(name || '').trim(),
+      phone: String(phone || '').trim()
+    };
+
+    const { data, error } = await supabase.auth.updateUser({ data: metadata });
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+    
+    if (data && data.user) {
+      const profilePayload = {
+        full_name: metadata.full_name,
+        phone: metadata.phone
+      };
+      await supabase.from('profiles').update(profilePayload).eq('id', data.user.id);
+    }
+
+    return res.json({
+      user: data.user,
+      isAdmin: isAdminEmail(data.user.email)
+    });
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to update profile' });
+  }
+});
+
 app.get('/api/products', async (req, res) => {
-  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_KEY) {
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
     return res.status(500).json({ error: 'Supabase env vars are missing' });
   }
 

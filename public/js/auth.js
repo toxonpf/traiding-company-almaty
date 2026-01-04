@@ -5,6 +5,7 @@ const registerMessage = document.getElementById('registerMessage');
 const resendButtons = document.querySelectorAll('[data-resend]');
 const resendMessage = document.getElementById('resendMessage');
 const lastEmailKey = 'auth_last_email';
+const urlParams = new URLSearchParams(window.location.search);
 
 async function parseResponse(response) {
     const contentType = response.headers.get('content-type') || '';
@@ -94,6 +95,9 @@ async function handleAuth(endpoint, payload, messageTarget) {
 }
 
 if (loginForm) {
+    if (urlParams.get('registered') === '1') {
+        setAuthMessage(loginMessage, 'Проверьте почту для подтверждения, затем войдите.', false);
+    }
     loginForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(loginForm);
@@ -101,7 +105,7 @@ if (loginForm) {
         const password = formData.get('password');
         const result = await handleAuth('/api/auth/login', { email, password }, loginMessage);
         if (result && result.session) {
-            window.location.href = 'admin.html';
+            window.location.href = 'index.html';
         } else if (result) {
             setAuthMessage(loginMessage, 'Проверьте подтверждение почты.', true);
         }
@@ -113,12 +117,16 @@ if (registerForm) {
         event.preventDefault();
         const formData = new FormData(registerForm);
         const email = formData.get('email');
+        const name = formData.get('name');
+        const phone = formData.get('phone');
         const password = formData.get('password');
-        const result = await handleAuth('/api/auth/register', { email, password }, registerMessage);
-        if (result && result.session) {
-            window.location.href = 'admin.html';
-        } else if (result) {
-            setAuthMessage(registerMessage, 'Проверьте почту для подтверждения и затем войдите.', false);
+        const result = await handleAuth(
+            '/api/auth/register',
+            { email, password, name, phone },
+            registerMessage
+        );
+        if (result) {
+            window.location.href = 'login.html?registered=1';
         }
     });
 }

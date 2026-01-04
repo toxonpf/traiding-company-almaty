@@ -36,6 +36,10 @@ main {
     padding: 1rem 2rem;
 
     box-shadow: 0 1px 2px 0 var(--shadow-soft);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    min-height: var(--navbar-height);
 }
 
 .navbarContainer {
@@ -207,6 +211,9 @@ main {
 
     background-color: var(--grayscale-white);
     box-shadow: 0 1px 2px 0 var(--shadow-soft);
+    position: sticky;
+    top: calc(var(--navbar-height) + 12px);
+    align-self: flex-start;
 }
 
 .SMButton {
@@ -458,10 +465,11 @@ main {
 
 /* Сетка каталога */
 .catalogGrid {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
     gap: 24px;
     max-width: 100%;
+    align-items: stretch;
 }
 
 .icon {
@@ -486,7 +494,7 @@ main {
 
 /* КАРТОЧКА ТОВАРА */
 .card {
-    width: 300px;
+    width: 100%;
     background: var(--grayscale-white);
     border-radius: var(--radius);
     padding: 16px;
@@ -688,4 +696,181 @@ main {
 
 [hidden] {
     display: none !important;
+}
+
+.site-footer {
+    background-color: var(--grayscale-50);
+    color: var(--grayscale-grey2);
+    padding: 60px 20px 30px;
+    margin-top: 60px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 40px;
+}
+
+.footer-brand .logo {
+    color: var(--grayscale-white);
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 20px;
+    display: block;
+    text-decoration: none;
+}
+
+.footer-brand .logo span {
+    color: var(--brand);
+}
+
+.footer-logo img {
+    display: block;
+    height: 48px;
+    width: auto;
+}
+
+.footer-brand p {
+    line-height: 1.6;
+    font-size: 14px;
+    margin-bottom: 20px;
+    max-width: 300px;
+}
+
+.footer-title {
+    color: var(--grayscale-white);
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 25px;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    color: var(--grayscale-grey1);
+    text-decoration: none;
+    font-size: 14px;
+    transition: var(--transition);
+}
+
+.footer-links a:hover {
+    color: var(--brand);
+}
+
+.footerText {
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.newsletter-input-group {
+    display: flex;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 4px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.newsletter-input-group input {
+    background: transparent;
+    border: none;
+    padding: 10px 15px;
+    color: white;
+    flex: 1;
+    outline: none;
+    font-size: 14px;
+}
+
+.subscribe-btn {
+    background: var(--brand);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.subscribe-btn:hover {
+    background: var(--brand-dark);
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.social-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    transition: var(--transition);
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.social-icon:hover {
+    background: var(--brand);
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    max-width: 1200px;
+    margin: 60px auto 0;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+}
+
+.footer-legal {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-legal a {
+    color: var(--grayscale-grey1);
+    text-decoration: none;
+}
+
+@media (max-width: 992px) {
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
 }

@@ -197,6 +197,35 @@
     text-decoration: underline;
 }
 
+.profileList {
+    display: grid;
+    gap: 12px;
+    text-align: left;
+}
+
+.profileRow {
+    display: grid;
+    gap: 6px;
+}
+
+.profileLabel {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: #5f6b7a;
+}
+
+.profileValue {
+    font-size: 16px;
+    color: var(--auth-text-primary);
+    word-break: break-word;
+}
+
+.profileActions {
+    display: grid;
+    gap: 12px;
+}
+
 @media (max-width: 640px) {
     .authCard {
         padding: 36px 24px;

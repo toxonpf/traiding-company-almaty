@@ -63,4 +63,5 @@
     --auth-button-hover-bg: var(--brand-dark);
     --auth-error-text: var(--accent-red);
     --auth-success-text: var(--accent-green);
+    --navbar-height: 90px;
 }
