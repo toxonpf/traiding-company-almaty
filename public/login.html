@@ -10,34 +10,36 @@
     <link rel="stylesheet" href="styles/auth.css">
 </head>
 
-<body class="authPage">
+<body class="authPage" data-i18n-title="page.login">
     <main class="authCard">
-        <a class="authBack" href="index.html">← Вернуться</a>
-        <h1>Вход</h1>
-        <p class="authSubtitle">Войдите в свой аккаунт для доступа к системе</p>
+        <a class="authBack" href="index.html" data-i18n="auth.back">Вернуться</a>
+        <h1 data-i18n="auth.titleLogin">Вход</h1>
+        <p class="authSubtitle" data-i18n="auth.subtitleLogin">Войдите в свой аккаунт для доступа к системе</p>
         <form id="loginForm" class="authForm">
             <label class="authLabel">
-                Email
+                <span data-i18n="auth.email">Email</span>
                 <input type="email" name="email" required autocomplete="email">
             </label>
             <label class="authLabel">
-                Пароль
+                <span data-i18n="auth.password">Пароль</span>
                 <input type="password" name="password" required autocomplete="current-password">
             </label>
-            <button type="submit" class="button authSubmit">Войти</button>
+            <button type="submit" class="button authSubmit" data-i18n="auth.signIn">Войти</button>
             <p id="loginMessage" class="authMessage"></p>
         </form>
         <div class="authResend">
-            <p>Не подтверждено письмо?</p>
-            <button class="button authResendBtn" data-resend>Отправить подтверждение</button>
+            <p data-i18n="auth.resendTitleLogin">Не подтверждено письмо?</p>
+            <button class="button authResendBtn" data-resend data-i18n="auth.resendBtnLogin">Отправить подтверждение</button>
             <p id="resendMessage" class="authMessage"></p>
         </div>
         <div class="authFooter">
-            <span>Нет аккаунта?</span>
-            <a href="register.html">Регистрация</a>
+            <span data-i18n="auth.noAccount">Нет аккаунта?</span>
+            <a href="register.html" data-i18n="auth.register">Регистрация</a>
         </div>
     </main>
+    <script src="js/i18n.js"></script>
     <script src="js/auth.js"></script>
 </body>
 
 </html>
+

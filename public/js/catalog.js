@@ -65,12 +65,15 @@ function buildStars(rating) {
 
 function renderProductCard(product) {
     const title = product.title || product.name || 'Без названия';
-    const category = product.category || product.category_name || '';
+    const category = product.category || product.category_name || (product.categories && product.categories.name) || '';
     const image = product.image_url || product.image || product.photo_url || 'https://placehold.co/400x400/4cb5b5/ffffff.png?text=Product';
     const rating = Number(product.rating);
     const reviews = product.reviews_count ?? product.reviews ?? '';
-    const currency = product.currency_symbol || product.currency || '';
-    const price = formatPrice(product.price, currency);
+    const latestPrice = Array.isArray(product.prices) && product.prices.length
+        ? [...product.prices].sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')))[0]
+        : null;
+    const currency = (latestPrice && latestPrice.currency) || product.currency_symbol || product.currency || '';
+    const price = formatPrice(latestPrice && latestPrice.price, currency);
     const oldPrice = formatPrice(product.old_price || product.oldPrice, currency);
     const badge = normalizeBadge(product);
 
@@ -84,8 +87,8 @@ function renderProductCard(product) {
 
     const oldPriceHtml = oldPrice ? `<span class="oldPrice">${oldPrice}</span>` : '';
 
-    return `
-        <div class="card">
+    const productId = product.sku || product.id || product.product_id || '';
+    const cardInner = `
             <div class="cardImageWrapper">
                 ${badgeHtml}
                 <button class="wishlistBtn" onclick="toggleLike(this)">
@@ -111,12 +114,40 @@ function renderProductCard(product) {
                     </button>
                 </div>
             </div>
+    `;
+
+    if (productId !== '') {
+        const paramKey = product.sku ? 'sku' : 'id';
+        return `
+            <a class="cardLink" href="product.html?${paramKey}=${encodeURIComponent(productId)}">
+                <div class="card">
+                    ${cardInner}
+                </div>
+            </a>
+        `;
+    }
+
+    return `
+        <div class="card">
+            ${cardInner}
         </div>
     `;
 }
 
+function getCategoryName(product) {
+    return product.category || product.category_name || (product.categories && product.categories.name) || 'Без категории';
+}
+
+function normalizeQuery(value) {
+    return String(value || '').trim().toLowerCase();
+}
+
 async function loadCatalog() {
     const grid = document.querySelector('#catalogGrid');
+    const categoryList = document.querySelector('#categoryList');
+    const searchInput = document.querySelector('#catalogSearch');
+    const countValue = document.querySelector('#catalogCountValue');
+    const emptyState = document.querySelector('#catalogEmpty');
     if (!grid) {
         return;
     }
@@ -134,10 +165,96 @@ async function loadCatalog() {
 
         if (!items.length) {
             grid.textContent = 'Нет доступных товаров';
+            if (countValue) {
+                countValue.textContent = '0';
+            }
             return;
         }
 
-        grid.innerHTML = items.map(renderProductCard).join('');
+        let activeCategory = 'all';
+        let searchValue = '';
+
+        const uniqueCategories = Array.from(new Set(items.map(getCategoryName)))
+            .filter(Boolean)
+            .sort((a, b) => String(a).localeCompare(String(b), 'ru'));
+
+        function renderCategories() {
+            if (!categoryList) {
+                return;
+            }
+            const allLabel = categoryList.getAttribute('data-all-label') || 'Все категории';
+            const buttons = [
+                { id: 'all', label: allLabel },
+                ...uniqueCategories.map((name) => ({ id: name, label: name }))
+            ];
+            categoryList.innerHTML = buttons
+                .map((item) => {
+                    const isActive = item.id === activeCategory;
+                    return `<button class="categoryBtn ${isActive ? 'active' : ''}" data-category="${item.id}">${item.label}</button>`;
+                })
+                .join('');
+        }
+
+        function applyFilters() {
+            const query = normalizeQuery(searchValue);
+            const filtered = items.filter((product) => {
+                const title = normalizeQuery(product.title || product.name);
+                const category = normalizeQuery(getCategoryName(product));
+                const matchCategory = activeCategory === 'all' || normalizeQuery(activeCategory) === category;
+                const matchQuery = !query || title.includes(query) || category.includes(query);
+                return matchCategory && matchQuery;
+            });
+
+            if (countValue) {
+                countValue.textContent = String(filtered.length);
+            }
+
+            if (!filtered.length) {
+                grid.innerHTML = '';
+                if (emptyState) {
+                    emptyState.hidden = false;
+                } else {
+                    grid.textContent = 'Нет доступных товаров';
+                }
+                return;
+            }
+
+            if (emptyState) {
+                emptyState.hidden = true;
+            }
+            grid.innerHTML = filtered.map(renderProductCard).join('');
+        }
+
+        renderCategories();
+        applyFilters();
+
+        if (categoryList) {
+            categoryList.addEventListener('click', (event) => {
+                const target = event.target;
+                if (!(target instanceof HTMLElement)) {
+                    return;
+                }
+                const nextCategory = target.getAttribute('data-category');
+                if (!nextCategory) {
+                    return;
+                }
+                activeCategory = nextCategory;
+                renderCategories();
+                applyFilters();
+            });
+        }
+
+        if (searchInput) {
+            searchInput.addEventListener('input', () => {
+                searchValue = searchInput.value || '';
+                applyFilters();
+            });
+        }
+
+        document.addEventListener('languagechange', () => {
+            renderCategories();
+            applyFilters();
+        });
     } catch (err) {
         grid.textContent = 'Не удалось загрузить товары';
     }

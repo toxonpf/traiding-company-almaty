@@ -10,42 +10,44 @@
     <link rel="stylesheet" href="styles/auth.css">
 </head>
 
-<body class="authPage">
+<body class="authPage" data-i18n-title="page.register">
     <main class="authCard">
-        <a class="authBack" href="index.html">← На сайт</a>
-        <h1>Регистрация</h1>
-        <p class="authSubtitle">Создайте аккаунт для доступа к системе</p>
+        <a class="authBack" href="index.html" data-i18n="auth.backHome">На сайт</a>
+        <h1 data-i18n="auth.titleRegister">Регистрация</h1>
+        <p class="authSubtitle" data-i18n="auth.subtitleRegister">Создайте аккаунт для доступа к системе</p>
         <form id="registerForm" class="authForm">
             <label class="authLabel">
-                Email
+                <span data-i18n="auth.email">Email</span>
                 <input type="email" name="email" required autocomplete="email">
             </label>
             <label class="authLabel">
-                Имя
+                <span data-i18n="auth.name">Имя</span>
                 <input type="text" name="name" required autocomplete="name">
             </label>
             <label class="authLabel">
-                Телефон
+                <span data-i18n="auth.phone">Телефон</span>
                 <input type="tel" name="phone" required autocomplete="tel">
             </label>
             <label class="authLabel">
-                Пароль
+                <span data-i18n="auth.password">Пароль</span>
                 <input type="password" name="password" required minlength="6" autocomplete="new-password">
             </label>
-            <button type="submit" class="button authSubmit">Создать аккаунт</button>
+            <button type="submit" class="button authSubmit" data-i18n="auth.signUp">Создать аккаунт</button>
             <p id="registerMessage" class="authMessage"></p>
         </form>
         <div class="authResend">
-            <p>Не пришло письмо?</p>
-            <button class="button authResendBtn" data-resend>Отправить еще раз</button>
+            <p data-i18n="auth.resendTitleRegister">Не пришло письмо?</p>
+            <button class="button authResendBtn" data-resend data-i18n="auth.resendBtnRegister">Отправить еще раз</button>
             <p id="resendMessage" class="authMessage"></p>
         </div>
         <div class="authFooter">
-            <span>Уже есть аккаунт?</span>
-            <a href="login.html">Войти</a>
+            <span data-i18n="auth.haveAccount">Уже есть аккаунт?</span>
+            <a href="login.html" data-i18n="auth.signIn">Войти</a>
         </div>
     </main>
+    <script src="js/i18n.js"></script>
     <script src="js/auth.js"></script>
 </body>
 
 </html>
+

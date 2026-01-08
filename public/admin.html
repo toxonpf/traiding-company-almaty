@@ -4,81 +4,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Админ‑панель</title>
+    <title>Админ-панель</title>
     <link rel="stylesheet" href="styles/normolise.css">
+    <link rel="stylesheet" href="styles/vars.css">
     <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/admin.css">
+    <link rel="stylesheet" href="styles/admin-panel.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 
-<body class="adminPage">
-    <header class="adminHeader">
-        <div>
-            <h1>Админ‑панель</h1>
-            <p id="adminUser" class="adminUser"></p>
-        </div>
-        <div class="adminActions">
-            <a class="button" href="index.html">На сайт</a>
-            <button class="button" id="logoutBtn">Выйти</button>
-        </div>
-    </header>
-    <main class="adminMain">
-        <section class="adminSection">
-            <h2>Данные</h2>
-            <div class="adminControls">
-                <label>
-                    Таблица
-                    <select id="tableSelect">
-                        <option value="categories">categories</option>
-                        <option value="products">products</option>
-                        <option value="prices">prices</option>
-                        <option value="batches">batches</option>
-                        <option value="suppliers">suppliers</option>
-                        <option value="receipts">receipts</option>
-                        <option value="receipt_items">receipt_items</option>
-                        <option value="sales">sales</option>
-                        <option value="sale_items">sale_items</option>
-                        <option value="profiles">profiles</option>
-                        <option value="stock_movements">stock_movements</option>
-                    </select>
-                </label>
-                <label>
-                    Лимит
-                    <input type="number" id="limitInput" value="100" min="1" max="500">
-                </label>
-                <button class="button" id="loadBtn">Загрузить</button>
+<body class="adminPage" data-i18n-title="page.admin">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-box">
+                <i data-lucide="layout-grid"></i>
             </div>
-            <div id="dataStatus" class="adminStatus"></div>
-            <div id="dataList" class="adminList"></div>
-        </section>
+            <span class="brand-name">TCA Admin</span>
+        </div>
 
-        <section class="adminSection">
-            <h2>Создание записи</h2>
-            <form id="createForm" class="adminForm">
-                <textarea id="createJson" rows="8" placeholder='{"name":"Категория"}'></textarea>
-                <button class="button" type="submit">Создать</button>
-                <p id="createStatus" class="adminStatus"></p>
-            </form>
-        </section>
+        <ul class="sidebar-menu">
+            <li class="menu-item">
+                <a href="#" class="menu-link active" data-tab="data">
+                    <i data-lucide="database"></i>
+                    <span>Данные</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link" data-tab="create">
+                    <i data-lucide="plus-circle"></i>
+                    <span>Создание</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link" data-tab="update">
+                    <i data-lucide="file-edit"></i>
+                    <span>Обновление</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link" data-tab="delete">
+                    <i data-lucide="trash-2"></i>
+                    <span>Удаление</span>
+                </a>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link" data-tab="upload">
+                    <i data-lucide="image"></i>
+                    <span>Изображения</span>
+                </a>
+            </li>
+        </ul>
 
-        <section class="adminSection">
-            <h2>Обновление записи</h2>
-            <form id="updateForm" class="adminForm">
-                <input id="updateId" type="text" placeholder="id записи" required>
-                <textarea id="updateJson" rows="8" placeholder='{"name":"Новое имя"}'></textarea>
-                <button class="button" type="submit">Обновить</button>
-                <p id="updateStatus" class="adminStatus"></p>
-            </form>
-        </section>
+        <div class="sidebar-footer">
+            <a href="#" class="menu-link" id="logoutBtn" style="color: var(--accent-red)">
+                <i data-lucide="log-out"></i>
+                <span>Выход</span>
+            </a>
+        </div>
+    </aside>
 
-        <section class="adminSection">
-            <h2>Удаление записи</h2>
-            <form id="deleteForm" class="adminForm">
-                <input id="deleteId" type="text" placeholder="id записи" required>
-                <button class="button danger" type="submit">Удалить</button>
-                <p id="deleteStatus" class="adminStatus"></p>
-            </form>
-        </section>
-    </main>
+    <div class="main-wrapper">
+        <nav class="navbar">
+            <div class="page-title">
+                <h1 id="panelTitle">Данные</h1>
+                <p id="panelSubtitle">Управляйте таблицами и данными.</p>
+            </div>
+            <div class="nav-actions">
+                <a class="button" href="index.html">На сайт</a>
+                <span id="adminUser" class="adminUser"></span>
+            </div>
+        </nav>
+
+        <main class="content">
+            <section class="panelSection active" data-section="data">
+                <div class="data-card">
+                    <div class="adminControls">
+                        <label>
+                            Таблица
+                            <select id="tableSelect">
+                                <option value="categories">categories</option>
+                                <option value="products">products</option>
+                                <option value="prices">prices</option>
+                                <option value="batches">batches</option>
+                                <option value="suppliers">suppliers</option>
+                                <option value="receipts">receipts</option>
+                                <option value="receipt_items">receipt_items</option>
+                                <option value="sales">sales</option>
+                                <option value="sale_items">sale_items</option>
+                                <option value="profiles">profiles</option>
+                                <option value="stock_movements">stock_movements</option>
+                            </select>
+                        </label>
+                        <label>
+                            Лимит
+                            <input type="number" id="limitInput" value="100" min="1" max="500">
+                        </label>
+                        <button class="button" id="loadBtn">Загрузить</button>
+                    </div>
+                    <div id="dataStatus" class="adminStatus"></div>
+                    <div id="dataList" class="adminList"></div>
+                </div>
+            </section>
+
+            <section class="panelSection" data-section="create">
+                <div class="data-card">
+                    <h2>Создание товара</h2>
+                    <form id="createProductForm" class="adminForm">
+                        <input id="productName" type="text" placeholder="Название товара" required>
+                        <input id="productSku" type="text" placeholder="Артикул" readonly>
+                        <select id="productCategory" required>
+                            <option value="">Выберите категорию</option>
+                        </select>
+                        <textarea id="productDescription" rows="4" placeholder="Описание товара"></textarea>
+                        <input id="productPrice" type="number" min="0" step="0.01" placeholder="Цена" required>
+                        <input id="productStock" type="number" min="0" step="1" placeholder="Количество на складе" required>
+                        <input id="productImage" type="file" accept="image/*">
+                        <button class="button" type="submit">Создать товар</button>
+                        <p id="createProductStatus" class="adminStatus"></p>
+                    </form>
+                </div>
+                <div class="data-card">
+                    <h2>Создание записи (любая таблица)</h2>
+                    <form id="createForm" class="adminForm">
+                        <textarea id="createJson" rows="8" placeholder='{"name":"Категория"}'></textarea>
+                        <button class="button" type="submit">Создать</button>
+                        <p id="createStatus" class="adminStatus"></p>
+                    </form>
+                </div>
+            </section>
+
+            <section class="panelSection" data-section="update">
+                <div class="data-card">
+                    <h2>Обновление записи</h2>
+                    <form id="updateForm" class="adminForm">
+                        <input id="updateId" type="text" placeholder="id записи" required>
+                        <textarea id="updateJson" rows="8" placeholder='{"name":"Новое имя"}'></textarea>
+                        <button class="button" type="submit">Обновить</button>
+                        <p id="updateStatus" class="adminStatus"></p>
+                    </form>
+                </div>
+            </section>
+
+            <section class="panelSection" data-section="delete">
+                <div class="data-card">
+                    <h2>Удаление записи</h2>
+                    <form id="deleteForm" class="adminForm">
+                        <input id="deleteId" type="text" placeholder="id записи" required>
+                        <button class="button danger" type="submit">Удалить</button>
+                        <p id="deleteStatus" class="adminStatus"></p>
+                    </form>
+                </div>
+            </section>
+
+            <section class="panelSection" data-section="upload">
+                <div class="data-card">
+                    <h2>Загрузка изображения товара</h2>
+                    <form id="uploadForm" class="adminForm">
+                        <input id="uploadProductId" type="text" placeholder="id товара" required>
+                        <input id="uploadFile" type="file" accept="image/*" required>
+                        <button class="button" type="submit">Загрузить</button>
+                        <p id="uploadStatus" class="adminStatus"></p>
+                    </form>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/admin-panel.js"></script>
     <script src="js/admin.js"></script>
 </body>
 

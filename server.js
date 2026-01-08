@@ -232,7 +232,7 @@ app.get('/api/products', async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('products')
-      .select('*')
+      .select('*, categories(name), prices(price, currency, created_at)')
       .order('id', { ascending: true });
 
     if (error) {
@@ -243,6 +243,41 @@ app.get('/api/products', async (req, res) => {
   } catch (err) {
     return res.status(500).json({ error: 'Failed to load products' });
   }
+});
+
+app.get('/api/products/:id', async (req, res) => {
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return res.status(500).json({ error: 'Supabase env vars are missing' });
+  }
+
+  const id = req.params.id;
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*, categories(name), prices(price, currency, created_at)')
+      .eq(isUuid ? 'id' : 'sku', id)
+      .maybeSingle();
+
+    if (error) {
+      return res.status(500).json({ error: error.message });
+    }
+
+    if (!data) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    return res.json({ item: data });
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to load product' });
+  }
+});
+
+app.get('/api/config', (req, res) => {
+  return res.json({
+    supabaseUrl: process.env.SUPABASE_URL || '',
+    supabaseAnonKey: process.env.SUPABASE_ANON_KEY || ''
+  });
 });
 
 app.get('/api/admin/:table', requireAdmin, async (req, res) => {

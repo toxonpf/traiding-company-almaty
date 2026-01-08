@@ -13,6 +13,18 @@
     border-bottom: 1px solid #e5e5e5;
 }
 
+.adminHeaderBrand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.adminLogo {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
 .adminHeader h1 {
     margin-bottom: 6px;
 }
@@ -71,6 +83,13 @@
 .adminForm textarea {
     resize: vertical;
     font-family: "Courier New", monospace;
+}
+
+.adminForm input[type="file"] {
+    border: 1px dashed #c8c8c8;
+    border-radius: 8px;
+    padding: 10px 12px;
+    background: #f8fafc;
 }
 
 .adminStatus {
