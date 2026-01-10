@@ -548,32 +548,14 @@ a{
     margin-bottom: 16px;
 }
 
-.categoryList {
-    display: grid;
-    gap: 10px;
-}
-
-.categoryBtn {
-    border: 1px solid var(--grayscale-grey2);
-    background: var(--grayscale-white);
-    color: var(--grayscale-50);
+.categorySelect {
+    width: 100%;
     padding: 10px 12px;
+    border: 1px solid var(--grayscale-grey2);
     border-radius: 12px;
-    text-align: left;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.categoryBtn:hover {
-    border-color: var(--brand);
-    color: var(--brand-dark);
-}
-
-.categoryBtn.active {
-    background: var(--brand-10a);
-    border-color: var(--brand);
-    color: var(--brand);
-    font-weight: 600;
+    background: var(--grayscale-white);
+    font-size: 0.95rem;
+    color: var(--grayscale-50);
 }
 
 .catalogContent {
@@ -609,6 +591,48 @@ a{
 .catalogEmpty {
     color: var(--grayscale-grey1);
     padding: 20px 0;
+}
+
+.catalogFilters {
+    margin-top: 24px;
+    display: grid;
+    gap: 16px;
+}
+
+.catalogFilters h3 {
+    font-size: 1rem;
+}
+
+.filterGroup {
+    display: grid;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: var(--grayscale-50);
+}
+
+.filterGroup select,
+.filterGroup input {
+    padding: 10px 12px;
+    border: 1px solid var(--grayscale-grey2);
+    border-radius: 10px;
+    font-size: 0.9rem;
+    background: var(--grayscale-white);
+}
+
+.priceInputs {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.filterReset {
+    width: 100%;
+    background: var(--grayscale-grey3);
+    color: var(--grayscale-50);
+}
+
+.filterReset:hover {
+    background: var(--grayscale-grey2);
 }
 
 @media (max-width: 1024px) {

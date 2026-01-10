@@ -178,6 +178,43 @@ body {
     gap: 12px;
 }
 
+.productForm {
+    gap: 18px;
+}
+
+.productFormGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.formField {
+    display: grid;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--grayscale-50);
+}
+
+.formField span {
+    font-weight: 600;
+    color: var(--grayscale-100);
+}
+
+.formField small {
+    color: var(--grayscale-grey1);
+    font-size: 12px;
+}
+
+.formSpan2 {
+    grid-column: span 2;
+}
+
+.formActions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
 .adminForm textarea {
     resize: vertical;
     font-family: "Courier New", monospace;
@@ -186,6 +223,21 @@ body {
 .adminForm input[type="file"] {
     border: 1px dashed var(--grayscale-grey2);
     background: var(--grayscale-grey3);
+}
+
+@media (max-width: 900px) {
+    .productFormGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .formSpan2 {
+        grid-column: span 1;
+    }
+
+    .formActions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
 
 .adminStatus {

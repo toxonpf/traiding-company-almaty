@@ -25,6 +25,7 @@ const productCategory = document.getElementById('productCategory');
 const productDescription = document.getElementById('productDescription');
 const productPrice = document.getElementById('productPrice');
 const productStock = document.getElementById('productStock');
+const productUnit = document.getElementById('productUnit');
 const productImage = document.getElementById('productImage');
 const createProductStatus = document.getElementById('createProductStatus');
 const adminUser = document.getElementById('adminUser');
@@ -65,6 +66,30 @@ function generateSku(name) {
     const upper = String(name).trim().toUpperCase();
     const cleaned = upper.replace(/[^0-9A-ZА-ЯЁ]+/g, '-').replace(/^-+|-+$/g, '');
     return cleaned || 'ITEM';
+}
+
+async function skuExists(sku) {
+    const response = await fetch(`/api/admin/products/sku/${encodeURIComponent(sku)}`, {
+        headers: { ...authHeaders() }
+    });
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(data.error || 'Ошибка проверки артикула');
+    }
+    return Boolean(data.exists);
+}
+
+async function ensureUniqueSku(baseSku) {
+    if (!baseSku) {
+        return '';
+    }
+    let candidate = baseSku;
+    let counter = 1;
+    while (await skuExists(candidate)) {
+        candidate = `${baseSku}-${counter}`;
+        counter += 1;
+    }
+    return candidate;
 }
 
 async function loadCategories() {
@@ -112,7 +137,8 @@ async function createPriceRecord(productId, priceValue) {
         body: JSON.stringify({
             product_id: productId,
             price: Number(priceValue),
-            currency: 'KZT'
+            currency: 'KZT',
+            price_type: 'retail'
         })
     });
     const data = await response.json();
@@ -129,8 +155,48 @@ async function loadConfig() {
     return response.json();
 }
 
+function readFileAsBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const result = String(reader.result || '');
+            const base64 = result.split(',')[1] || '';
+            resolve(base64);
+        };
+        reader.onerror = () => reject(new Error('Не удалось прочитать файл'));
+        reader.readAsDataURL(file);
+    });
+}
+
+async function uploadImageViaAdmin(file) {
+    const base64 = await readFileAsBase64(file);
+    const response = await fetch('/api/admin/upload-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authHeaders() },
+        body: JSON.stringify({
+            fileName: file.name,
+            contentType: file.type || 'application/octet-stream',
+            dataBase64: base64
+        })
+    });
+    const data = await response.json();
+    if (!response.ok) {
+        throw new Error(data.error || 'Ошибка загрузки файла');
+    }
+    return data.publicUrl;
+}
+
+function sanitizeFileName(name) {
+    const cleaned = String(name)
+        .normalize('NFKD')
+        .replace(/[^\w.-]+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    return cleaned || 'image';
+}
+
 async function uploadImageToStorage(file, config) {
-    const safeName = file.name.replace(/\s+/g, '-');
+    const safeName = sanitizeFileName(file.name);
     const filePath = `${Date.now()}-${safeName}`;
     const uploadUrl = `${config.supabaseUrl}/storage/v1/object/products/${encodeURIComponent(filePath)}`;
     const response = await fetch(uploadUrl, {
@@ -376,11 +442,7 @@ if (uploadForm) {
         }
         try {
             setStatus(uploadStatus, 'Загрузка...', false);
-            const config = await loadConfig();
-            if (!config.supabaseUrl || !config.supabaseAnonKey) {
-                throw new Error('Нет SUPABASE_ANON_KEY или SUPABASE_URL');
-            }
-            const imageUrl = await uploadImageToStorage(file, config);
+            const imageUrl = await uploadImageViaAdmin(file);
             await updateProductImage(productId, imageUrl);
             setStatus(uploadStatus, 'Готово', false);
             if (uploadFile) {
@@ -395,9 +457,25 @@ if (uploadForm) {
     });
 }
 
+let skuTimer = null;
 if (productName && productSku) {
     productName.addEventListener('input', () => {
-        productSku.value = generateSku(productName.value);
+        const baseSku = generateSku(productName.value);
+        productSku.value = baseSku;
+        if (skuTimer) {
+            clearTimeout(skuTimer);
+        }
+        if (!baseSku) {
+            return;
+        }
+        skuTimer = setTimeout(async () => {
+            try {
+                const unique = await ensureUniqueSku(baseSku);
+                productSku.value = unique;
+            } catch (err) {
+                setStatus(createProductStatus, err.message, true);
+            }
+        }, 400);
     });
 }
 
@@ -410,21 +488,27 @@ if (createProductForm) {
         const description = productDescription ? productDescription.value.trim() : '';
         const priceValue = productPrice ? productPrice.value : '';
         const stockValue = productStock ? productStock.value : '';
+        const unitValue = productUnit ? productUnit.value.trim() : '';
         const file = productImage && productImage.files ? productImage.files[0] : null;
 
-        if (!name || !categoryId || priceValue === '' || stockValue === '') {
+        if (!name || !categoryId || priceValue === '' || stockValue === '' || !unitValue) {
             setStatus(createProductStatus, 'Заполните все обязательные поля', true);
             return;
         }
 
         try {
             setStatus(createProductStatus, 'Создаем товар...', false);
+            const finalSku = await ensureUniqueSku(sku || generateSku(name));
+            if (productSku) {
+                productSku.value = finalSku;
+            }
             const productPayload = {
                 name,
-                sku: sku || generateSku(name),
+                sku: finalSku,
                 category_id: categoryId,
                 notes: description || null,
                 min_stock: Number(stockValue),
+                unit: unitValue,
                 status: 'active'
             };
 
@@ -436,11 +520,7 @@ if (createProductForm) {
             await createPriceRecord(createdProduct.id, priceValue);
 
             if (file) {
-                const config = await loadConfig();
-                if (!config.supabaseUrl || !config.supabaseAnonKey) {
-                    throw new Error('Нет SUPABASE_ANON_KEY или SUPABASE_URL');
-                }
-                const imageUrl = await uploadImageToStorage(file, config);
+                const imageUrl = await uploadImageViaAdmin(file);
                 await updateProductImage(createdProduct.id, imageUrl);
             }
 

@@ -29,7 +29,7 @@ const adminTables = new Set([
   'stock_movements'
 ]);
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 app.use(express.static(publicDir));
 
 function getBearerToken(req) {
@@ -280,6 +280,45 @@ app.get('/api/config', (req, res) => {
   });
 });
 
+function sanitizeFileName(name) {
+  return String(name || 'image')
+    .normalize('NFKD')
+    .replace(/[^\w.-]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'image';
+}
+
+app.post('/api/admin/upload-image', requireAdmin, async (req, res) => {
+  const { fileName, contentType, dataBase64 } = req.body || {};
+  if (!fileName || !dataBase64) {
+    return res.status(400).json({ error: 'fileName and dataBase64 are required' });
+  }
+
+  try {
+    const safeName = sanitizeFileName(fileName);
+    const filePath = `${Date.now()}-${safeName}`;
+    const buffer = Buffer.from(dataBase64, 'base64');
+    const { data, error } = await supabase.storage
+      .from('products')
+      .upload(filePath, buffer, {
+        contentType: contentType || 'application/octet-stream',
+        upsert: true
+      });
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    const { data: publicData } = supabase.storage
+      .from('products')
+      .getPublicUrl(data.path);
+
+    return res.json({ path: data.path, publicUrl: publicData.publicUrl });
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to upload image' });
+  }
+});
+
 app.get('/api/admin/:table', requireAdmin, async (req, res) => {
   const table = req.params.table;
   if (!adminTables.has(table)) {
@@ -323,6 +362,25 @@ app.post('/api/admin/:table', requireAdmin, async (req, res) => {
     return res.json({ items: data || [] });
   } catch (err) {
     return res.status(500).json({ error: 'Failed to create record' });
+  }
+});
+
+app.get('/api/admin/products/sku/:sku', requireAdmin, async (req, res) => {
+  const sku = req.params.sku;
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('id')
+      .eq('sku', sku)
+      .maybeSingle();
+
+    if (error) {
+      return res.status(400).json({ error: error.message });
+    }
+
+    return res.json({ exists: Boolean(data) });
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to check SKU' });
   }
 });
 

@@ -22,7 +22,15 @@ const translations = {
             countLabel: 'Товаров:',
             empty: 'Ничего не найдено.',
             searchPlaceholder: 'Поиск товаров...',
-            all: 'Все категории'
+            all: 'Все категории',
+            filtersTitle: 'Фильтры',
+            priceLabel: 'Цена',
+            priceMin: 'от',
+            priceMax: 'до',
+            manufacturerLabel: 'Производитель',
+            countryLabel: 'Страна',
+            any: 'Любой',
+            reset: 'Сбросить'
         },
         product: {
             catalog: 'Каталог',
@@ -129,7 +137,15 @@ const translations = {
             countLabel: 'Items:',
             empty: 'No products found.',
             searchPlaceholder: 'Search products...',
-            all: 'All categories'
+            all: 'All categories',
+            filtersTitle: 'Filters',
+            priceLabel: 'Price',
+            priceMin: 'min',
+            priceMax: 'max',
+            manufacturerLabel: 'Manufacturer',
+            countryLabel: 'Country',
+            any: 'Any',
+            reset: 'Reset'
         },
         product: {
             catalog: 'Catalog',
@@ -236,7 +252,15 @@ const translations = {
             countLabel: 'Тауарлар:',
             empty: 'Ештеңе табылмады.',
             searchPlaceholder: 'Тауарды іздеу...',
-            all: 'Барлық санаттар'
+            all: 'Барлық санаттар',
+            filtersTitle: 'Сүзгілер',
+            priceLabel: 'Баға',
+            priceMin: 'мин',
+            priceMax: 'макс',
+            manufacturerLabel: 'Өндіруші',
+            countryLabel: 'Ел',
+            any: 'Кез келген',
+            reset: 'Тазалау'
         },
         product: {
             catalog: 'Каталог',
@@ -356,11 +380,25 @@ function applyLanguage(lang) {
         }
     }
 
-    const categoryList = document.getElementById('categoryList');
-    if (categoryList) {
+    const categorySelect = document.getElementById('categorySelect');
+    if (categorySelect) {
         const allLabel = getTranslation(locale, 'catalog.all');
         if (allLabel) {
-            categoryList.setAttribute('data-all-label', allLabel);
+            categorySelect.setAttribute('data-all-label', allLabel);
+        }
+    }
+    const manufacturerFilter = document.getElementById('manufacturerFilter');
+    if (manufacturerFilter) {
+        const anyLabel = getTranslation(locale, 'catalog.any');
+        if (anyLabel) {
+            manufacturerFilter.setAttribute('data-any-label', anyLabel);
+        }
+    }
+    const countryFilter = document.getElementById('countryFilter');
+    if (countryFilter) {
+        const anyLabel = getTranslation(locale, 'catalog.any');
+        if (anyLabel) {
+            countryFilter.setAttribute('data-any-label', anyLabel);
         }
     }
     const breadcrumbs = document.getElementById('productBreadcrumbs');

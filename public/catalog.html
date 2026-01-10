@@ -15,9 +15,9 @@
 <body data-i18n-title="page.catalog">
     <header class="navbar">
         <div class="navbarContainer">
-            <div class="logoSection">
+            <a class="logoSection" href="index.html">
                 <img height="100%" src="img/logo.svg" alt="Логотип" class="logoImg">
-            </div>
+            </a>
             <div class="searchSection">
                 <div class="searchWrapper">
                     <div class="searchIconWrapper">
@@ -65,7 +65,32 @@
     <main class="catalogMain">
         <aside class="catalogSidebar">
             <h2 class="catalogSidebarTitle" data-i18n="catalog.rubricator">Рубрикатор</h2>
-            <div class="categoryList" id="categoryList" data-all-label="Все категории"></div>
+            <select id="categorySelect" class="categorySelect" data-all-label="Все категории">
+                <option value="">Все категории</option>
+            </select>
+            <div class="catalogFilters">
+                <h3 data-i18n="catalog.filtersTitle">Фильтры</h3>
+                <div class="filterGroup">
+                    <span data-i18n="catalog.priceLabel">Цена</span>
+                    <div class="priceInputs">
+                        <input id="priceMin" type="number" min="0" step="0.01" placeholder="от" data-i18n-placeholder="catalog.priceMin">
+                        <input id="priceMax" type="number" min="0" step="0.01" placeholder="до" data-i18n-placeholder="catalog.priceMax">
+                    </div>
+                </div>
+                <div class="filterGroup">
+                    <span data-i18n="catalog.manufacturerLabel">Производитель</span>
+                    <select id="manufacturerFilter" data-any-label="Любой">
+                        <option value="" data-i18n="catalog.any">Любой</option>
+                    </select>
+                </div>
+                <div class="filterGroup">
+                    <span data-i18n="catalog.countryLabel">Страна</span>
+                    <select id="countryFilter" data-any-label="Любая">
+                        <option value="" data-i18n="catalog.any">Любая</option>
+                    </select>
+                </div>
+                <button class="button filterReset" type="button" id="filtersReset" data-i18n="catalog.reset">Сбросить</button>
+            </div>
         </aside>
         <section class="catalogContent">
             <div class="catalogHeader">

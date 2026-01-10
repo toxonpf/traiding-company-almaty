@@ -69,9 +69,7 @@ function renderProductCard(product) {
     const image = product.image_url || product.image || product.photo_url || 'https://placehold.co/400x400/4cb5b5/ffffff.png?text=Product';
     const rating = Number(product.rating);
     const reviews = product.reviews_count ?? product.reviews ?? '';
-    const latestPrice = Array.isArray(product.prices) && product.prices.length
-        ? [...product.prices].sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')))[0]
-        : null;
+    const latestPrice = getLatestPrice(product);
     const currency = (latestPrice && latestPrice.currency) || product.currency_symbol || product.currency || '';
     const price = formatPrice(latestPrice && latestPrice.price, currency);
     const oldPrice = formatPrice(product.old_price || product.oldPrice, currency);
@@ -138,16 +136,28 @@ function getCategoryName(product) {
     return product.category || product.category_name || (product.categories && product.categories.name) || 'Без категории';
 }
 
+function getLatestPrice(product) {
+    if (!Array.isArray(product.prices) || !product.prices.length) {
+        return null;
+    }
+    return [...product.prices].sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')))[0];
+}
+
 function normalizeQuery(value) {
     return String(value || '').trim().toLowerCase();
 }
 
 async function loadCatalog() {
     const grid = document.querySelector('#catalogGrid');
-    const categoryList = document.querySelector('#categoryList');
+    const categorySelect = document.querySelector('#categorySelect');
     const searchInput = document.querySelector('#catalogSearch');
     const countValue = document.querySelector('#catalogCountValue');
     const emptyState = document.querySelector('#catalogEmpty');
+    const priceMinInput = document.querySelector('#priceMin');
+    const priceMaxInput = document.querySelector('#priceMax');
+    const manufacturerFilter = document.querySelector('#manufacturerFilter');
+    const countryFilter = document.querySelector('#countryFilter');
+    const filtersReset = document.querySelector('#filtersReset');
     if (!grid) {
         return;
     }
@@ -173,26 +183,51 @@ async function loadCatalog() {
 
         let activeCategory = 'all';
         let searchValue = '';
+        let priceMin = '';
+        let priceMax = '';
+        let manufacturer = '';
+        let country = '';
 
         const uniqueCategories = Array.from(new Set(items.map(getCategoryName)))
             .filter(Boolean)
             .sort((a, b) => String(a).localeCompare(String(b), 'ru'));
 
         function renderCategories() {
-            if (!categoryList) {
+            if (!categorySelect) {
                 return;
             }
-            const allLabel = categoryList.getAttribute('data-all-label') || 'Все категории';
-            const buttons = [
+            const allLabel = categorySelect.getAttribute('data-all-label') || 'Все категории';
+            const options = [
                 { id: 'all', label: allLabel },
                 ...uniqueCategories.map((name) => ({ id: name, label: name }))
             ];
-            categoryList.innerHTML = buttons
-                .map((item) => {
-                    const isActive = item.id === activeCategory;
-                    return `<button class="categoryBtn ${isActive ? 'active' : ''}" data-category="${item.id}">${item.label}</button>`;
-                })
+            categorySelect.innerHTML = options
+                .map((item) => `<option value="${item.id}">${item.label}</option>`)
                 .join('');
+            categorySelect.value = activeCategory;
+        }
+
+        function renderFilterOptions() {
+            if (manufacturerFilter) {
+                const values = Array.from(new Set(items.map((item) => item.manufacturer).filter(Boolean)));
+                const anyLabel = manufacturerFilter.getAttribute('data-any-label') || 'Любой';
+                const options = [
+                    `<option value="">${anyLabel}</option>`,
+                    ...values.map((value) => `<option value="${value}">${value}</option>`)
+                ];
+                manufacturerFilter.innerHTML = options.join('');
+                manufacturerFilter.value = manufacturer;
+            }
+            if (countryFilter) {
+                const values = Array.from(new Set(items.map((item) => item.country).filter(Boolean)));
+                const anyLabel = countryFilter.getAttribute('data-any-label') || 'Любая';
+                const options = [
+                    `<option value="">${anyLabel}</option>`,
+                    ...values.map((value) => `<option value="${value}">${value}</option>`)
+                ];
+                countryFilter.innerHTML = options.join('');
+                countryFilter.value = country;
+            }
         }
 
         function applyFilters() {
@@ -200,9 +235,19 @@ async function loadCatalog() {
             const filtered = items.filter((product) => {
                 const title = normalizeQuery(product.title || product.name);
                 const category = normalizeQuery(getCategoryName(product));
+                const productManufacturer = normalizeQuery(product.manufacturer);
+                const productCountry = normalizeQuery(product.country);
+                const latest = getLatestPrice(product);
+                const price = latest && latest.price !== null && latest.price !== undefined ? Number(latest.price) : null;
+                const minValue = priceMin === '' ? null : Number(priceMin);
+                const maxValue = priceMax === '' ? null : Number(priceMax);
                 const matchCategory = activeCategory === 'all' || normalizeQuery(activeCategory) === category;
                 const matchQuery = !query || title.includes(query) || category.includes(query);
-                return matchCategory && matchQuery;
+                const matchManufacturer = !manufacturer || productManufacturer === normalizeQuery(manufacturer);
+                const matchCountry = !country || productCountry === normalizeQuery(country);
+                const matchMin = minValue === null || (price !== null && price >= minValue);
+                const matchMax = maxValue === null || (price !== null && price <= maxValue);
+                return matchCategory && matchQuery && matchManufacturer && matchCountry && matchMin && matchMax;
             });
 
             if (countValue) {
@@ -226,20 +271,12 @@ async function loadCatalog() {
         }
 
         renderCategories();
+        renderFilterOptions();
         applyFilters();
 
-        if (categoryList) {
-            categoryList.addEventListener('click', (event) => {
-                const target = event.target;
-                if (!(target instanceof HTMLElement)) {
-                    return;
-                }
-                const nextCategory = target.getAttribute('data-category');
-                if (!nextCategory) {
-                    return;
-                }
-                activeCategory = nextCategory;
-                renderCategories();
+        if (categorySelect) {
+            categorySelect.addEventListener('change', () => {
+                activeCategory = categorySelect.value || 'all';
                 applyFilters();
             });
         }
@@ -251,8 +288,51 @@ async function loadCatalog() {
             });
         }
 
+        if (priceMinInput) {
+            priceMinInput.addEventListener('input', () => {
+                priceMin = priceMinInput.value;
+                applyFilters();
+            });
+        }
+
+        if (priceMaxInput) {
+            priceMaxInput.addEventListener('input', () => {
+                priceMax = priceMaxInput.value;
+                applyFilters();
+            });
+        }
+
+        if (manufacturerFilter) {
+            manufacturerFilter.addEventListener('change', () => {
+                manufacturer = manufacturerFilter.value;
+                applyFilters();
+            });
+        }
+
+        if (countryFilter) {
+            countryFilter.addEventListener('change', () => {
+                country = countryFilter.value;
+                applyFilters();
+            });
+        }
+
+        if (filtersReset) {
+            filtersReset.addEventListener('click', () => {
+                priceMin = '';
+                priceMax = '';
+                manufacturer = '';
+                country = '';
+                if (priceMinInput) priceMinInput.value = '';
+                if (priceMaxInput) priceMaxInput.value = '';
+                if (manufacturerFilter) manufacturerFilter.value = '';
+                if (countryFilter) countryFilter.value = '';
+                applyFilters();
+            });
+        }
+
         document.addEventListener('languagechange', () => {
             renderCategories();
+            renderFilterOptions();
             applyFilters();
         });
     } catch (err) {
